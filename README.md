@@ -2,6 +2,7 @@
 
 ***
 ###파스타 클라우드 활용(공통)
+
 1. 스프링프로젝트 parksangcheon_mysql 변경.
 2. 이클립스에서 parksangcheon_mysql 프로젝트를 파스타에 배포.(Hsql용)
 3. parksangcheon_mysql 로컬 mysql서버와 연동처리.
