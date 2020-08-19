@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+	<select id="selectMember" resultType="edu.human.com.member.service.EmployerInfoVO">
+		SELECT * FROM LETTNEMPLYRINFO
+	</select>
+	
+	<select id="viewMember" resultType="edu.human.com.member.service.EmployerInfoVO">
+		SELECT * FROM LETTNEMPLYRINFO WHERE EMPLYR_ID = #{EMPLYR_ID}
+	</select>
+	
+	<select id="selectAuth" resultType="edu.human.com.member.service.AuthVO">
+		SELECT * FROM LETTNAUTHORGROUPINFO
+	</select>
+	
+	<insert id="insertMember">
+		INSERT INTO LETTNEMPLYRINFO (
+			ESNTL_ID, 
+			EMPLYR_ID, 
+			PASSWORD, 
+			PASSWORD_HINT, 
+			PASSWORD_CNSR, 
+			USER_NM, 
+			ZIP, 
+			HOUSE_ADRES, 
+			EMAIL_ADRES, 
+			GROUP_ID, 
+			ORGNZT_ID, 
+			EMPLYR_STTUS_CODE,
+			SBSCRB_DE)
+		VALUES (
+			#{ESNTL_ID}, 
+			#{EMPLYR_ID}, 
+			#{PASSWORD}, 
+			#{PASSWORD_HINT},
+			#{PASSWORD_CNSR}, 
+			#{USER_NM}, 
+			#{ZIP}, 
+			#{HOUSE_ADRES}, 
+			#{EMAIL_ADRES}, 
+			#{GROUP_ID}, 
+			#{ORGNZT_ID}, 
+			#{EMPLYR_STTUS_CODE},
+			NOW())
+	</insert>
+	
+	<update id="updateMember">
+		UPDATE LETTNEMPLYRINFO 
+		SET 
+		    ESNTL_ID = #{ESNTL_ID},
+		    <if test="PASSWORD != ''">
+		   		PASSWORD = #{PASSWORD},
+		    </if>
+		    PASSWORD_HINT = #{PASSWORD_HINT},
+		    PASSWORD_CNSR = #{PASSWORD_CNSR},
+		    USER_NM = #{USER_NM},
+		    ZIP = #{ZIP},
+		    HOUSE_ADRES = #{HOUSE_ADRES},
+		    EMAIL_ADRES = #{EMAIL_ADRES},
+		    GROUP_ID = #{GROUP_ID},
+		    ORGNZT_ID = #{ORGNZT_ID},
+		    EMPLYR_STTUS_CODE = #{EMPLYR_STTUS_CODE}
+		WHERE
+		    EMPLYR_ID = #{EMPLYR_ID}
+	</update>
+	
+	<delete id="deleteMember">
+		DELETE FROM LETTNEMPLYRINFO WHERE  EMPLYR_ID = #{EMPLYR_ID}
+	</delete>
+	
+</mapper>

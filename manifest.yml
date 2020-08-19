@@ -1,0 +1,10 @@
+---
+applications:
+- name: parksangcheon-egov
+  memory: 1024M
+  disk_quota: 1024M
+  instances: 1
+  host: parksangcheon-egov
+  domain: paas-ta.org
+  services:
+  - parksangcheon-egov-db

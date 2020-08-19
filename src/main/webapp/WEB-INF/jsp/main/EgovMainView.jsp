@@ -141,6 +141,7 @@
 		</div>
 		<!-- //code layer -->		
 	</div>
+	<!-- container 끝 -->
 	<!-- footer 시작 -->
 	<div id="footer"><c:import url="/EgovPageLink.do?link=main/inc/EgovIncFooter" /></div>
 	<!-- //footer 끝 -->

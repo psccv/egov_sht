@@ -1,17 +1,123 @@
 ## 전자정부 표준 프레임워크 커스터마이징
 
 ***
-### 파스타 클라우드 활용(공통)
+### 커스터 마이징 후 파스타 클라우드 활용예정(공통)
 
-1. 스프링프로젝트 parksangcheon_mysql 변경.
-2. 이클립스에서 parksangcheon_mysql 프로젝트를 파스타에 배포.(Hsql용)
-3. parksangcheon_mysql 로컬 mysql서버와 연동처리.
-4. 파스타 클라우드에서 Mysql서비스 생성.(원격접속이름과 암호를 확인가능)
-5. 원격 phpmyadmin 툴(워크벤치와 비슷)을 파스타 클라우드에 PHP앱 생성 후 배포.
-6. parksangcheon_mysql 프로젝트를 클라우드용 DB사용으로 변경 후 파스타에 재배포. 	http://parksangcheon_mysql.paas-ta.org
-7. egov_sht 프로젝트 이름 변경: parksangcheon_egov 스타에배포(Mysql클라우드사용). 
-	http://parksangcheon_egov.paas-ta.org
+1. 스프링프로젝트 parksangcheon-egov 변경.
+2. 이클립스에서 parksangcheon-egov 프로젝트를 파스타에 배포.(Mysql용)
+3. parksangcheon-egov 프로젝트용 클라우드 DB생성: egov-mysql-db
+4. 파스타 클라우드에서 egov-mysql-db의 원격접속이름과 암호를확인
+5. 이미 생성된 phpmyadmin 애플리게이션명: parksangcheon- myadmin 실행
+6. http://parksangcheon-myadmin.paas-ta.org 접속후 전자정부 프로젝트용 더미데이터 인서트
+7. http://parksangcheon-egov.paas-ta.org 사이트에서 파스타 배포결과 확인
 ***
+
+### 200819(수)
+4. 클라우드 파스타 앱 제거 후, 생성(???-egovadmin관리용 앱 php앱)
+3. 클라우드 파스타 mysql서비스 제거 후, 생성(???-egov-db 서비스 이름)
+2. 타일즈 템플릿(UI-레이아웃정리) 라이브러리 사용했음. 전자정부 프로젝트에 적용OK.
+1. DB인터페이스 확인
+- 실행가능한 소스 https://github.com/miniplugin/Dbinterface_ora_ok.git
+(오라클 insert 후 커밋, System.out.print(vo.toString())
+
+###200818(화)
+2. 서버프로그램 시험준비 후 3교시부터 시험
+1.관리자 등록시 아이디 중복체크(RestAPI사용) 마무리.
+주의사항) RestAPI사용은 이클립스 내장브라우저에는 안되기 때문에, 크롬 또는 IE 
+
+
+###200817(월)
+3. 전자정부 프로젝트*(관리자관리기능추가한것) 파스타에 배포.
+2. 관리자 등록시 아이디 중복체크(RestAPI사용) 기능추가.
+1. 관리자관리 기능 CRUD 마무리 OK.
+
+###200814(금) 작업
+3. 로컬PC에서 결과 확인 후 파스타에 배포예정
+2. 멤버 뷰페이지, 업데이트 페이지, 인서트 페이지 생성
+
+```
+기존 작업한 스프링 프로젝트에서는
+<form id="폼이름" name="폼이름">
+</form>
+
+전자정부 프로젝트에서는
+<form:form commandName="폼이름" name="폼이름">
+</form:form>>
+```
+
+1. 컨트롤러에 멤버리스트페이지 경로 추가
+- edu.human.com.member.web 패키지생성(컨트롤러용 패키지)
+- MemberController.java @Controller클래스 생성.
+- 관리자 관리 경로 com/member/selectMember.do 로그인체크 추가
+로그인체크 관련 파일: egov-com-servelt.xml(서블렛파일) 인터셉터 관리
+뷰리졸버(viewresolver): 뷰단(jsp) 해석기계. (웹페이지루트, 확장자 지정)
+
+```
+/**
+*	관리자관리 목록을 조회한다.
+*/
+@RequestMapping("/com/member/selectMember.do")
+public List<EmployerInfoVO> selectMember(Model model) throws Exception{
+	model.addAttriute("resultList", 멤버서비스호출);
+	return "com/member/list";
+}
+
+```
+
+### 200812-13(수-목) 작업내역
+- jsp폴더(view폴더)에 inc/EgovIncLeftmenu/jsp 수정
+
+```
+메뉴 내용 추가
+<li class="dept02"><a href="javascript:fn_main_headPageAction('57','com/member/selectMember.do')">관리자관리</a></li>
+```
+- viewMember 쿼리, DAO, Service 매서드 추가
+- Junit 테스트로 CRUD 확인
+- Service 클래스에서 insertMember, updateMember, deleteMember 매서드 생성
+- DAO 클래스에서 insertMember, updateMember, deleteMember 매서드 생성
+- 쿼리생성:src/main/resource/egovframework/
+	mapper/com/member/member_mysql.xml
+
+
+### 200811(화) 작업내역
+-Junit 테스터로 DAO의 selectMember 실행하기.
+
+```
+3. egov-com-sertlet.xml 파일에서 component-scan에서 제외된 exclude를 include로 변경
+2. src.test.java/~TestMember.java 추가함. @ContextConfiguration 경로 2개 추가.
+1. 전자정부 프로젝트는 기본 Junit이 없기 때문에, 테스트환경 만들어야함.. Pom.xml에 Junit 모듈 추가하기.
+```
+
+-DAO(@Repository), Service(@service) 만들기
+
+```
+3. service/impl/MemberService.java(구현클래스) @Resource 대신 @Inject 사용
+2. service/MemberService.java(인터페이스)
+1. service/impl/MemberDAO.java(추상클래스를 사용, extends EgovAbstractMapper 필수)
+```
+- 프로젝트에서 마이바티스 사용하기
+
+```
+4. 스프링-마이바티스 설정파일 추가: context-mapper.xml
+- configLocation: 마이바티스 설정파일 위치 mapper-config.xml 추가
+- mapperLocation: 쿼리가 존재하는 폭더위치 member_mysql.xml 추가(쿼리)
+3. 관리자관리테이블과  get, set 하는 VO 만들기: EmployerInfoVO.java
+- 테이블 생성쿼리에서 필드명 복사VO 자바파일에서 사용, 특이사항, 대->소문자 Ctrl+Shift+y 단축키
+2. 관리자 관리에 사용되는 테이블 확인: emplyrinfo
+1. 메이븐 모듈 추가(pom.xml)
+<!-- 마이바티스 사용 모듈 추가 -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>3.2.8</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+```
 
 ### 200810(월) 작업내역
 
@@ -47,7 +153,7 @@ Globals.Url=jdbc:mysql://127.0.0.1:3306/sht
 egov-com-servlet.xml
 - Dispatcherservlet(서블렛배치=콤퍼넌트-scan:@Controller, @Service, @repository에 관련된 설정 수정)
 - <context:component-scan vase-package="egovframework,edu">
-- 위에서 ,edu 추가: edu.human.com 패키지 추가로 해당 패키지로 시작하는 콤포넌트를 빈 (실행 가능한 클래스)으로 자동들록하게 처리
+- 위에서 ,edu 추가: edu.human.com 패키지 추가로 해당 패키지로 시작하는 콤포넌트를 빈 (실행 가능한 클래스)으로 자동등록하게 처리
 ```
 
 - pom.xml : 메이븐 설정 파일중 Hsql DB를 Mysql DB사용으로 변경
